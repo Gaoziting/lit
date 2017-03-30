@@ -1,0 +1,90 @@
+  .sec_message{
+      background-color: #f6f6f6;
+  }
+  .sec_message .nav_me{
+    margin-top: 0;
+    border-top: none;
+    /*border-bottom: solid .01rem #eee;*/
+  }
+  header .sec_message .nav_me{
+  	border-top: solid .01rem #eee;
+  }
+  .sec_message .nav_me td{
+    width: 30%;
+  }
+  .sec_message .nav_me td a{
+    padding: 0;
+    font-size: .14rem;
+    line-height: .35rem;
+    background-color: #fff;
+    /*color: #006a8f;*/
+    color: #666;
+  }
+  .sec_message .nav_me td a.on{
+    /*color: #fff;*/
+    /*background-color: #006a8f;*/
+    background-color: #fff;
+    color: #006a8f;
+  }
+/*侧菜单*/
+  .fix_side{
+    display: none;
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    /*background-color: #0006;*/
+    z-index: 1000;
+    overflow-y: hidden;
+  }
+  .fix_side>.left{
+    /*position: absolute;*/
+    /*width: 66%;*/
+    width: 100%;
+    height: 100%;
+    background-color: #fffc;
+    top: 0;
+    text-align: center;
+    /*display: block;*/
+    padding-top: .2rem;
+  }
+  .fix_side>.left_blur{
+    position: absolute;
+    width: 66%;
+    height: 100%;
+    -webkit-filter: blur(4px);
+  }
+  .fix_side>.left>.wp_search{
+    background-color: #fff;
+    color: #aaa;
+    line-height: .3rem;
+    border-radius: .3rem;
+    border: solid .006rem #dbdbdb;
+    display: inline-block;
+    width: 2.5rem;
+  }
+  .fix_side>.left>.wp_search i{
+    font-size: .20rem;
+    vertical-align: middle;
+    margin-right: .03rem;
+  }
+  .fix_side>.left>.wp_search>div{
+    display: inline-block;
+  }
+  .fix_side>.left>.wp_search input{
+    border: none;
+    width: 70%;
+    padding: .03rem;
+  }
+  .fix_side .list_menu{
+    margin-top: .3rem;
+    text-align: left;
+    overflow-y: scroll;
+    height: 3rem;
+  }
+  .fix_side .list_menu li{
+    line-height: .4rem;
+    font-size: .16rem;
+    color: #666;
+  }
