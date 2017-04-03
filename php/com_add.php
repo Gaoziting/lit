@@ -3,13 +3,8 @@
 @include '../init.php';
 
 if (isset($_POST['cid'])) {
-	if (isset($_SESSION['uname'])) {
-		$usr = $_SESSION['uname'];
-		$uid = $_SESSION['uid'];
-	}else {
-		$usr = '游客';
-		$uid = 0;
-	}
+	$usr = isset($_SESSION['uname'])?$_SESSION['uname']:'游客';
+	$uid = isset($_SESSION['uid'])?$_SESSION['uid']:0;
 	
 	// $aid = $_POST['aid'];
 	$cid = $_POST['cid'];

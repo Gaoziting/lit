@@ -3,7 +3,7 @@
 @include '../init.php';
 
 $uid = $_SESSION['uid'];
-$sql = "SELECT content_id,activity_id,to_comment_id,say,add_time AS tim FROM comment WHERE user_id = '$uid'";
+$sql = "SELECT comment_id AS comid,content_id,activity_id,to_comment_id,say,add_time AS tim FROM comment WHERE user_id = '$uid'";
 $rst = $dbh->query($sql);
 $arr = $rst->fetchAll();
 foreach ($arr as $k => $v) {
@@ -27,10 +27,11 @@ foreach ($arr as $k => $v) {
 	$arr[$k]['tar'] = 'acti';
 	switch ($target) {
 		case 'content':
-			$sql_sel = "SELECT content.description AS des,content.activity_id AS aid,cont_img.img_name AS img FROM content, cont_img WHERE content.content_id = cont_img.content_id AND content.content_id = $tid ";
+			$sql_sel = "SELECT content.content_id AS cid,content.description AS des,content.activity_id AS aid,cont_img.img_name AS img FROM content, cont_img WHERE content.content_id = cont_img.content_id AND content.content_id = $tid ";
 			$rst_sel = $dbh->query($sql_sel);
 			// var_dump($dbh->errorInfo());
 			$row = $rst_sel->fetch();
+			$arr[$k]['cid'] = $row['cid'];
 			$arr[$k]['des'] = $row['des'];
 			$arr[$k]['img'] = 'upload/content/'.$row['img'];
 			$aid = $row['aid'];
@@ -38,23 +39,28 @@ foreach ($arr as $k => $v) {
 			$rst_sel = $dbh->query($sql_sel);
 			$row = $rst_sel->fetch();
 			$arr[$k]['tit'] = $row[0];
+			$arr[$k]['tar'] = 'cont';
 			break;
 		case 'activity':
-			$sql_sel = "SELECT title,abstract,cover FROM activity WHERE activity_id = $tid";
+			$sql_sel = "SELECT activity_id AS aid,title,abstract,cover,page_name AS pag FROM activity WHERE activity_id = $tid";
 			$rst_sel = $dbh->query($sql_sel);
 			$row = $rst_sel->fetch();
-			$arr[$k]['tit'] = $row[0];
-			$arr[$k]['des'] = $row[1];
-			$arr[$k]['img'] = 'upload/activity/'.$row[2];
+			$arr[$k]['aid'] = $row[0];
+			$arr[$k]['tit'] = $row[1];
+			$arr[$k]['des'] = $row[2];
+			$arr[$k]['img'] = 'upload/activity/'.$row[3];
+			$arr[$k]['pag'] = 'activity/'.$row[4];
+			$arr[$k]['tar'] = 'acti';
 			break;
 		case 'comment':
-			$sql_sel = "SELECT say,user.headimg AS img,user.uname AS tit FROM comment,user WHERE comment.user_id=user.user_id AND comment.comment_id = $tid";
+			$sql_sel = "SELECT comment_id AS comid,say,user.headimg AS img,user.uname AS tit FROM comment,user WHERE comment.user_id=user.user_id AND comment.comment_id = $tid";
 			$rst_sel = $dbh->query($sql_sel);
 			$row = $rst_sel->fetch();
-			$arr[$k]['tar'] = 'user';
+			$arr[$k]['comid'] = $row['comid'];
 			$arr[$k]['tit'] = $row['tit'];
 			$arr[$k]['img'] = 'upload/user/'.$row['img'];
 			$arr[$k]['des'] = $row['say'];
+			$arr[$k]['tar'] = 'com';
 			break;
 		default:
 			# code...

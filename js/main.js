@@ -46,21 +46,26 @@
 // 页面滚动监视
 	$(window).on('scroll', function() {
 		// console.log($(this).scrollTop());
-		if ($(this).scrollTop()>300) {
-			if (flagShowHeader) {
-				// var opacity = $(this).scrollTop()-300;
-				$("#nav_main").slideUp();
-				flagShowHeader = 0;
-			}
-		}else {
-			if (flagShowHeader == 0) {
-				$("#nav_main").slideDown();
-				flagShowHeader = 1;
-			}
-		}
 		if ($("#pag").val()==1) {
-			console.log($("#nav_uinfo"));
-			console.log($("#nav_uinfo").offset());
+			if ($("#nav_uinfo").offset().top-$(window).scrollTop()<51) {
+				$("#fix_nav_uinfo").show();
+			}else {
+				$("#fix_nav_uinfo").hide();
+			}
+			// console.log($("#nav_uinfo"));
+			// console.log($("#nav_uinfo").offset());
+			if ($(this).scrollTop()>300) {
+				if (flagShowHeader) {
+					// var opacity = $(this).scrollTop()-300;
+					$("#nav_main").slideUp();
+					flagShowHeader = 0;
+				}
+			}else {
+				if (flagShowHeader == 0) {
+					$("#nav_main").slideDown();
+					flagShowHeader = 1;
+				}
+			}
 			// var dTopScreen = $("#toggle_acti").offset().top-$(window).scrollTop();
 			// 直播页
 			switch (flagNavUinfo) {
@@ -125,7 +130,50 @@
     	if (!flagMesComLoaded) {fnMesCom();}
     	fnHideSec();
     	$("#com").fadeIn();
+    	console.log($("#com .replyMes"));
 	});
+// 评论
+	function fnAddComment(data,$p,$wp='') {
+	    $.ajax({
+	        url: '../php/comment_add.php',
+	        type: 'POST',
+	        dataType: 'json',
+	        data: data,
+	        beforeSend: function() {
+	            fnLoading(1);
+	        },
+	        success: function(data) {
+	            fnLoading(0);
+	            if (data.status == 200) {
+	            	if ($wp!='') {
+	            		var wp = '<table class="wrap2">\
+		                <input type="hidden" value="'+data.comid+'">\
+		                  <tr class="r1">\
+		                      <td><div class="imgWrap"><img src="'+data.uimg+'" alt=""></div></td>\
+		                      <td class="commenter"><div>'+data.usr+'</div><div class="time">'+data.tim+'</div></td>\
+		                      <td class="agreeN">0</td>\
+		                      <td><i class="icon-thumb_up agree"></i></td>\
+		                  </tr>\
+		                  <tr class="r2">\
+		                    <td></td>\
+		                    <td class="say" colspan="2">'+data.say+'</td>\
+		                  </tr>\
+		                </table>';
+		                $wp.append(wp);
+	            	}
+	            	// alert("举报成功！");
+	            	$p.parent().children('textarea').val('');
+	            	$p.parent('.report_wrap').fadeOut();
+	            } else {
+	                $p.html(data.status);
+	            }
+	        },
+	      error: function (hd,msg) {
+	            fnLoading(0);
+	        alert(msg);
+	      },
+	    });
+	}
 	$("#navAgr").on('click', function(e) {
     	fnSwitchOn($(this));
     	if (!flagMesArgLoaded) {fnMesArg();}
@@ -281,17 +329,25 @@ if (fnIsLogged()) {fnLoadActi ();}
 	      success: function (data) {
 	            fnLoading(0);
 	            data.forEach( function(element, i) {
+		      		if (data[i]["tar"]=='com') {
 	            	var list_comm = 
-					    '<div class="wp_message">\
+					    '<a class="wp_message" href="activity/comment.php?type=comment&id='+data[i]["comid"]+'">\
 		      		        <div class="comment"><div>'+data[i]["say"]+'</div><span class="time">'+data[i]["tim"]+'</span></div>';
-		      		if (data[i]["tar"]=='user') {
 		      			list_comm += '<div class="who"><div class="imgWrap uimg"><img src="'+data[i]["img"]+'" alt=""></div><div>';
-		      		}else {
+		      		}else if (data[i]["tar"]=='cont'){
+	            	var list_comm = 
+					    '<a class="wp_message" href="activity/comment.php?type=content&id='+data[i]["cid"]+'#com'+data[i]["comid"]+'">\
+		      		        <div class="comment"><div>'+data[i]["say"]+'</div><span class="time">'+data[i]["tim"]+'</span></div>';
+		      			list_comm += '<div class="who acti"><div class="imgWrap uimg"><img src="'+data[i]["img"]+'" alt=""></div><div>';
+		      		}else{
+	            	var list_comm = 
+					    '<a class="wp_message" href="'+data[i]["pag"]+'">\
+		      		        <div class="comment"><div>'+data[i]["say"]+'</div><span class="time">'+data[i]["tim"]+'</span></div>';
 		      			list_comm += '<div class="who acti"><div class="imgWrap uimg"><img src="'+data[i]["img"]+'" alt=""></div><div>';
 		      		}
 		      		list_comm += '<div class="name">'+data[i]["tit"]+'</div><div class="say">'+data[i]["des"]+'</div></div>\
 		      		        </div>\
-		      		    </div>';
+		      		    </a>';
 					$("#toggle_comm").next(".wp_list").prepend(list_comm);
 	            });
 			    flagCommLoaded = 1;
@@ -317,13 +373,13 @@ if (fnIsLogged()) {fnLoadActi ();}
 	            data.forEach( function(element, i) {
 	            	console.log(data[i]);
 	            	var list_like = 
-					    '<div class="wp_message like">\
+					    '<a href="activity/'+data[i]["pag"]+'#cont'+data[i]["cid"]+'" class="wp_message like">\
 		      		        <div class="who acti">\
 			      		        <div class="imgWrap"><img src="'+data[i]["img"]+'" alt=""></div>\
 			      		        <div><div class="name">'+data[i]["tit"]+'</div><div class="say">'+data[i]["des"]+'</div></div>\
 			      		        <span class="time">'+data[i]["tim"]+'</span>\
 		      		        </div>\
-		      		    </div>';
+		      		    </a>';
 					$("#toggle_like").next(".wp_list").prepend(list_like);
 	            });
 			    flagLikeLoaded = 1;
@@ -348,7 +404,7 @@ if (fnIsLogged()) {fnLoadActi ();}
 	            	var list_focu = 
 		            	'<div class="list_acti">\
 							<div><div class="imgWrap"><img src="'+data[i]["img"]+'" alt=""></div></div>\
-							<a href="'+data[i]["pag"]+'" class="tit_abs"><div>'+data[i]["tit"]+'</div><div>'+data[i]["des"]+'</div></a>\
+							<a href="activity/'+data[i]["pag"]+'" class="tit_abs"><div>'+data[i]["tit"]+'</div><div>'+data[i]["des"]+'</div></a>\
 							<div class="tim"><div>'+data[i]["tim"]+'</div><i class="icon-bin del_acti"></i></div>\
 						</div>';
 					$("#toggle_focu").next(".wp_list").prepend(list_focu);
@@ -377,7 +433,7 @@ if (fnIsLogged()) {fnLoadActi ();}
 				            <div class="who">\
 				                <div class="imgWrap"><img src="'+data[i]['img']+'" alt=""></div>\
 					                <div><div class="name">'+data[i]['nam']+'</div><span class="time">'+data[i]['tim']+'</span>评论了你</div>\
-					                <a class="btn btn_reply">回复</a>\
+					                <a class="btn replyMes">回复</a>\
 						            </div>\
 					            <div class="comment">'+data[i]['com']+'</div>\
 				            <div class="say">'+data[i]['say']+'</div>\
@@ -385,6 +441,37 @@ if (fnIsLogged()) {fnLoadActi ();}
 					$("#com").prepend(mes);
 	            });
 			    flagMesComLoaded = 1;
+				$("#com").find('.replyMes').on('click', function() {
+					var $wp = $('#wpComment');
+					var $say = $wp.children('textarea');
+			    	var $p = $wp.children('.prompt');
+			    	$wp.children('.close').click(function() {
+				    	$wp.fadeOut();
+				    	$say.val('');
+			    	});
+			    	console.log($t.closest('.wrap2').find('.commenter>div:first-child').text());
+			    	var commenter = $t.closest('.wrap2').find('.commenter>div:first-child').text();
+					$say.attr('placeholder', '回复'+commenter+'：');;
+			    	$wp.children('.submitComment').attr('disabled', 'true');
+					$wp.children('textarea').bind('input propertychange', function() {
+						if ($(this).val().length<1) {
+							$(this).parent().children('.submitComment').attr('disabled', 'true');
+						}else{
+							$(this).parent().children('.submitComment').removeAttr('disabled');
+						}
+					});
+			    	$wp.children('.submitComment').click(function() {
+				    	if ($say.val()=='') {
+				    		$p.html('请输入评论'); 
+				    	}else {
+				    		var comid = $t.closest('.wrap2').children('input').val();
+				    		var data = {'say':$say.val(),'to_typ':'comment','to_id':comid};
+				    		fnAddComment(data,$p,$t.closest('.wrap2'));
+				    	}
+			    	});
+			    	$wp.fadeIn();
+			    	$say.focus();
+				});
 	      },
 	      error: function (hd,msg) {
 	            fnLoading(0);

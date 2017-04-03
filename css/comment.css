@@ -26,10 +26,11 @@
   #commentPage .wrap1 tr,#commentPage .wrap2{
     position: relative;
     /*width: 95%;*/
-    margin: .1rem .15rem;
+    margin: 0 .15rem;
     border-bottom: solid .005rem #eee;
     display: block;
     padding-bottom: .05rem;
+    padding-top: .1rem;
   }
   #commentPage .wrap2>.wrap2{
     padding-bottom: 0;
@@ -139,4 +140,30 @@ ul,ol{list-style-type: none;}
   #wpReport.report_wrap,#wpComment.report_wrap{
     position: fixed;
     top: 35%;
+  }
+/*活动评论*/
+  .wp_acti{
+    position: relative;
+    display: inline-block;
+    width: 100%;
+    margin: .1rem .15rem .05rem;
+  }
+  .wp_acti .tit{
+    font-size: .16rem;
+  }
+  .wp_acti .imgWrap{
+    width: .3rem;
+    height: .3rem;
+    border-radius: 50%;
+  }
+  .wp_acti>.row{
+    font-size: .13rem;
+    color: #888;
+  }
+  .wp_acti>.row>div:nth-child(2){
+    padding: 
+  }
+
+  .wp_reply{
+    background-color: #fafafa;
   }

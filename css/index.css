@@ -313,7 +313,7 @@ ul, ol{margin: 0;}
   .list_acti .imgWrap{
     width: .4rem;
     height: .4rem;
-    border-radius: .1rem;
+    /*border-radius: .1rem;*/
   }
   .list_acti .imgWrap>img{
     width: 100%;
@@ -341,6 +341,7 @@ ul, ol{margin: 0;}
   }
 /*消息列表*/
   .wp_message{
+    display: block;
     padding: .05rem .15rem 0;
     background-color: #fff;
     margin-bottom: .05rem;
@@ -1096,8 +1097,12 @@ ul, ol{margin: 0;}
     -o-transition-property:color 500; /* Opera */
     color: #d72a10;
   }
-  .separate_page .head>.right>i{
+  .separate_page .head>.right>i,.separate_page .head>.right>a{
     margin-right: .25rem;
+  }
+  .separate_page .head>.right>a{
+    color: #565656;
+    /*line-height: .44rem;*/
   }
   .separate_page .head>.right>.moreEdit{
     margin-right:.03rem;
@@ -1376,8 +1381,9 @@ ul, ol{margin: 0;}
 /*举报*/
   .report_wrap{
     display: none;
-    position: absolute;
+    position: fixed;
     width: 2.6rem;
+    top: 20%;
     left: 50%;
     margin-left: -1.3rem;
     text-align: center;

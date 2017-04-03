@@ -710,8 +710,8 @@ $dbh = NULL;
 			<div class="list_menu history">
 				<div class="head">近期搜索</div>
 				<div class="body">
-					<div class="col-xs-4"><a>生活生活生活生活生活</a></div>
-					<div class="col-xs-4"><a>艺术艺术艺术</a></div>
+					<div class="col-xs-4"><a>希子</a></div>
+					<div class="col-xs-4"><a>直播</a></div>
 					<div class="col-xs-4"><a>体育</a></div>
 				</div>
 			</div>
@@ -780,6 +780,13 @@ $dbh = NULL;
 <div class=".blur-box">
 	<h2>你好</h2>
 </div> -->
+</div>
+<!-- 评论 -->
+<div class="report_wrap" id="wpComment">
+    <a class="close icon-cross"></a>
+    <textarea class="say" rows="3" placeholder="回复："></textarea>
+    <div class="prompt"></div>
+    <a class="btn submitComment">回复</a>
 </div>
 <!-- 加载中 -->
 <div id="loading">

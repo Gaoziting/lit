@@ -2,7 +2,7 @@ $(function(){
 	function fnIsLogged () {
 		// console.log($("#userInfo")[0]);
 		// console.log($("#usr").val());
-		return ($("#usr").val()=='')?false:true;
+		return ($("#uid").val()==''||$("#uid").val()==0)?false:true;
 	}
 	function fnPopLog(){
 		fnUnscroll($("body"));

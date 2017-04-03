@@ -227,10 +227,7 @@ if (isLogged()) {
                     $row_com = $rst_com->fetch();
                 }
                 if ($comN>0) {?>
-                <form action="comment.php" method="post" enctype="multipart/form-data">
-                    <input type="hidden" name="cid" value="<?php echo $cid ?>">
-                    <input type="submit" class="reply-detail moreCom" value="查看更多评论">
-                </form>
+                <a href="comment.php?type=content&id=<?php echo $cid?>" class="reply-detail moreCom">查看更多评论</a>
                 <?php }
             }
         ?>
@@ -246,7 +243,7 @@ if (isLogged()) {
             <a href="../index.php" class="icon-home logo"></a>
             <div class="right">
                 <i class="icon-redo refresh"></i>
-                <i class="icon-bubble2 comment"></i>
+                <a href="comment.php?type=activity&id=<?php echo $aid?>"><i class="icon-bubble2"></i></a>
                 <!--关注-->
                 <?php if (canEdit($fromUId)) {?>
                 <i class="icon-edit moreEdit"></i>

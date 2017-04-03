@@ -163,7 +163,7 @@
   .content2 hr{
     margin: 0;
   }
-  .content2 p{
+  .content2>p,.guts>p{
     font-size: .15rem;
     color: #222;
     /*margin: .12rem 0. 6rem 0;*/
@@ -198,21 +198,21 @@
     left: 0;
     /*margin: auto;*/
   }
-  .content2 .interact-icons {
+  .guts .interact-icons {
     text-align: right;
     padding: 0 .20rem .05rem 0;
     /*border-bottom:. 1rem solid #e8e8e8;*/
   }
-  .content2 .interact-icons div{
+  .guts .interact-icons div{
     display: inline-block;
     color: #a6a6a6;
     font-size: .13rem;
     margin-right: 5%;
   }
-  .content2 .interact-icons div:last-child{
+  .guts .interact-icons div:last-child{
     margin-right: 0;
   }
-  .content2 .interact-icons a{
+  .guts .interact-icons a{
     margin-right: .02rem;
     font-size: .22rem;
     cursor: pointer;
@@ -248,7 +248,7 @@
     color: #006a8f;
   }
   .reply-detail .comment{}
-  .content2 a{
+  .cont-body a{
     color: #694bfc;
     color: #ff5f5f;
     color: #006a8f;

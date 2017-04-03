@@ -1,7 +1,7 @@
 <?php 
 // header("Content-Type: text/html; charset=utf-8");
 
-$dsn="mysql:dbname=itol;host=localhost";
+$dsn="mysql:dbname=lit;host=localhost";
 $db_user='root';
 $db_pass='';
 try{

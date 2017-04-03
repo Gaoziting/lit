@@ -9,9 +9,9 @@ if (!isset($_POST['cid'])) {
 	$cid = $_POST['cid'];
 	$uid = $_SESSION['uid'];
 	$bro = $_SESSION['uname'];
-	// $sql = "DELETE FROM COMMENT WHERE toContentID = '$cid'";
-	// $rst = $dbh->exec($sql);
-	// echo '已删除该图文的评论';
+	$sql = "DELETE FROM comment WHERE content_id = '$cid'";
+	$rst = $dbh->exec($sql);
+	echo '已删除该图文的评论';
 	// 选择图片地址 删除图片
 	// $sql = "SELECT img_name FROM content WHERE content_id = '$cid'";
 	$sql = "SELECT img_name FROM cont_img WHERE content_id = '$cid'";

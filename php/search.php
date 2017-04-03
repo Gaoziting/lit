@@ -29,7 +29,7 @@ switch ($stype) {
 			$arr['acti'][$k]['cover'] = 'upload/activity/'.$arr['acti'][$k]['cover'];
 			$arr['acti'][$k]['page_name'] = 'activity/'.$arr['acti'][$k]['page_name'];
 		}
-		$rst = $dbh->query("SELECT content.content_id AS cid,content.description AS des,activity.title AS tit,activity.page_name AS pag,cont_img.img_name AS img FROM content JOIN activity ON content.activity_id=activity.activity_id JOIN cont_img ON content.content_id=cont_img.content_id WHERE description like '%$name%'");
+		$rst = $dbh->query("SELECT content.content_id AS cid,count(distinct content.content_id),content.description AS des,activity.title AS tit,activity.page_name AS pag,cont_img.img_name AS img FROM content JOIN activity ON content.activity_id=activity.activity_id JOIN cont_img ON content.content_id=cont_img.content_id WHERE description like '%$name%' GROUP BY content.content_id");
 		// var_dump($dbh->errorInfo());
 		$arr['cont'] = $rst->fetchAll();
 		// var_dump($arr['acti']);
