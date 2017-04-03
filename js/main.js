@@ -207,10 +207,11 @@
 		}
 	}
 // 左侧菜单滚动
-$("#sideMenu").on('scroll', function(e) {
-	e.preventDefault();
-	e.stopPropagation();
-});
+// $("#sideMenu").on('scroll', function(e) {
+// 	e.preventDefault();
+// 	e.stopPropagation();
+// });
+
 function fnUnfoldList(obj){
 	// console.log($lastSlideDown!=null&&$lastSlideDown['prevObject'][0]==obj['prevObject'][0]);
 	if (obj.is('.unfold')) {

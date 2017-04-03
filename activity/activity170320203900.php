@@ -249,7 +249,7 @@ if (isLogged()) {
         <input type="hidden" value="5">
         <div class="head">
             <i class="icon-navigate_before leave"></i>
-            <a href="../index.php" class="icon-tv logo"></a>
+            <a href="../index.php" class="icon-home logo"></a>
             <div class="right">
                 <i class="icon-redo refresh"></i>
                 <!--关注-->

@@ -243,9 +243,10 @@ if (isLogged()) {
         <input type="hidden" value="{aid}">
         <div class="head">
             <i class="icon-navigate_before leave"></i>
-            <a href="../index.php" class="icon-tv logo"></a>
+            <a href="../index.php" class="icon-home logo"></a>
             <div class="right">
                 <i class="icon-redo refresh"></i>
+                <i class="icon-bubble2 comment"></i>
                 <!--关注-->
                 <?php if (canEdit($fromUId)) {?>
                 <i class="icon-edit moreEdit"></i>

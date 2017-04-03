@@ -42,8 +42,8 @@ function isPublisher(){
 <!-- 顶部菜单 -->
 <header>
 	<div id="nav_main">
-		<span class="icon-search menu"></span><span class="icon-tv logo"></span><span class="icon-user-circle-o user"></span>
-		<div class="imgWrap logo_center"><img src="image/logo-w.png" alt=""></div>
+		<span class="icon-search search"></span><span class="icon-home logo"></span><span class="icon-user-circle-o user"></span>
+		<div class="imgWrap logo_center"><img src="image/logo-w9.png" alt=""></div>
 	</div>
 	<table class="nav_me nav" id="fix_nav_uinfo">
 		<tr>
@@ -689,18 +689,90 @@ $dbh = NULL;
 ?>
 <div class="fix_side" id="sideMenu">
 	<!-- <div class="left_blur"></div> -->
-	<div class="left">
-		<div class="wp_search">
-			<i class="icon-search"></i><input type="text" placeholder="搜索">
+	<div class="head">
+		<i class="icon-angle-up close"></i>
+		<div class="wp_search"><form action=""><input type="search" id="input_kw" placeholder="搜索"></form>
+		</div><div class="btn_search">搜索</div><span class="cancel">取消</span>
+	</div>
+	<div class="body">
+		<div class="choose">
+			<div class="list_menu type">
+				<div class="head">活动种类</div>
+				<div class="body">
+					<div class="col-xs-4"><a>生活</a></div>
+					<div class="col-xs-4"><a>艺术</a></div>
+					<div class="col-xs-4"><a>体育</a></div>
+					<div class="col-xs-4"><a>实践</a></div>
+					<div class="col-xs-4"><a>科研</a></div>
+					<div class="col-xs-4"><a>摄影</a></div>
+				</div>
+			</div>
+			<div class="list_menu history">
+				<div class="head">近期搜索</div>
+				<div class="body">
+					<div class="col-xs-4"><a>生活生活生活生活生活</a></div>
+					<div class="col-xs-4"><a>艺术艺术艺术</a></div>
+					<div class="col-xs-4"><a>体育</a></div>
+				</div>
+			</div>
+			<!-- <div class="list_menu">
+				<div class="head">热门搜索</div>
+				<div class="body">
+					<div class="col-xs-4"><a>生活生活生活生活</a></div>
+					<div class="col-xs-4"><a>艺术艺术艺术</a></div>
+					<div class="col-xs-4"><a>体育</a></div>
+					<div class="col-xs-4"><a>实践</a></div>
+					<div class="col-xs-4"><a>科研</a></div>
+				</div>
+			</div> -->
 		</div>
-		<div class="list_menu">
-			<ul>
-				<li>生活</li>
-				<li>艺术</li>
-				<li>体育</li>
-				<li>实践</li>
-				<li>科研</li>
-			</ul>
+		<div class="result">
+			<div class="list_result">
+				<div class="head">活动</div>
+				<div class="body" id="actiResult">
+					<a>
+						<div class="col-xs-2">
+							<div class="imgWrap"><img src="image/default3.jpg"></div>
+						</div>
+						<div class="col-xs-10">
+							<div class="r1">活动标题</div>
+							<div class="r2">概要</div>
+						</div>
+					</a>
+					<a>
+						<div class="col-xs-2">
+							<div class="imgWrap"><img src="image/default3.jpg"></div>
+						</div>
+						<div class="col-xs-10">
+							<div class="r1">活动标题</div>
+							<div class="r2">概要</div>
+						</div>
+					</a>
+				</div>
+			</div>
+			<div class="list_result">
+				<div class="head">图文</div>
+				<div class="body" id="contResult">
+					<a>
+						<div class="col-xs-2">
+							<div class="imgWrap"><img src="image/default3.jpg"></div>
+						</div>
+						<div class="col-xs-10">
+							<div class="r1">图文描述</div>
+							<div class="r2">活动标题</div>
+						</div>
+					</a>
+					<a>
+						<div class="col-xs-2">
+							<div class="imgWrap"><img src="image/default3.jpg"></div>
+						</div>
+						<div class="col-xs-10">
+							<div class="r1">图文描述</div>
+							<div class="r2">活动标题</div>
+						</div>
+					</a>
+				</div>
+			</div>
 		</div>
 	</div>
 </div>

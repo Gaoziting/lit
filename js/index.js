@@ -23,19 +23,140 @@ $(function(){
 	});
 	// 侧菜单显示搜索
 	var flagLastBlur;
-	$("#nav_main .menu").on('click', function() {
+	function fnShowSearchResult(acti='',cont=''){
+		if (cont=='') {
+			$("#contResult").parent('.list_result').css('display', 'none');
+		}else{
+			$("#contResult").parent('.list_result').css('display', 'block');
+		}
+		$("#sideMenu .result").show().animate({'left': '0'});
+		$("#sideMenu .choose").animate({'left': '-100vw','opacity': '0'},function(){
+			$("#sideMenu .close").removeClass('icon-angle-up').addClass('icon-angle-left').off('click').on('click', function(e) {
+				e.preventDefault();
+				fnReturnSearch();
+			});
+		});
+	}
+	function fnReturnSearch(){
+		$("#sideMenu .choose").animate({'left': '0','opacity': '1'});
+		$("#sideMenu .result").animate({'left': '100vw'},function(){$(this).hide();},function(){
+			$("#sideMenu .close").removeClass('icon-angle-left').addClass('icon-angle-up').off('click').on('click', function(e) {
+				$("#sideMenu").slideUp();
+				fnDeBlur();
+			});
+		});
+	}
+	function fnSearch(data){
+    	$.ajax({
+	      type: 'POST',
+	      url: 'php/search.php',
+	      dataType: 'json',
+	      data: data,
+	      timeout: 5000,
+	      beforeSend: function() {
+	      	fnLoading(1);
+	      },
+	      success: function(data){
+	      	fnLoading(0);
+			$("#actiResult").empty();
+			acti = data['acti'];
+            acti.forEach( function(element, i) {
+            	var list_acti = 
+	            	'<a href="'+acti[i]['page_name']+'">\
+						<div class="col-xs-2">\
+							<div class="imgWrap"><img src="'+acti[i]['cover']+'"></div>\
+						</div>\
+						<div class="col-xs-10">\
+							<div class="r1">'+acti[i]['title']+'</div>\
+							<div class="r2">'+acti[i]['abstract']+'</div>\
+						</div>\
+					</a>';
+				$("#actiResult").prepend(list_acti);
+            });
+			if (data['cont']!=null) {
+				$("#contResult").empty();
+				cont = data['cont'];
+	            cont.forEach( function(element, i) {
+	            	var list_cont = 
+		            	'<a href="'+cont[i]['pag']+'">\
+							<div class="col-xs-2">\
+								<div class="imgWrap"><img src="'+cont[i]['img']+'"></div>\
+							</div>\
+							<div class="col-xs-10">\
+								<div class="r1">'+cont[i]['des']+'</div>\
+								<div class="r2">'+cont[i]['tit']+'</div>\
+							</div>\
+						</a>';
+					$("#contResult").prepend(list_cont);
+	            });
+	            fnShowSearchResult('acti','cont');
+			}else fnShowSearchResult('acti');
+	      },
+	      error: function (hd,msg) {
+            fnLoading(0);
+	      }
+    	});
+	}
+	function fnKwSearch(){
+	    var data = {
+	    	'stype':'keyword',
+	    	'kw':$("#input_kw").val()
+	    }
+	    fnSearch(data);
+	}
+	$("#nav_main .search").on('click', function() {
 		$("#sideMenu").slideDown();
+		$("#sideMenu .close").on('click', function() {
+			$("#sideMenu").slideUp();
+			fnDeBlur();
+		});
 		if (flagNowPage==0) {
 			fnBlurUnderLayer($("#main"));
 		}else {
 			fnBlurUnderLayer($("#userInfo"));
 		}
-		
+		$("#sideMenu .type").on('click', function(e) {
+			e.stopPropagation();
+			$t = $(e.target);
+			if ($t.is('a')) {
+				console.log($t.text());
+				$("#input_kw").val($t.text());
+				var data = {
+					'stype':'type',
+					'tname':$t.text()
+				};
+				fnSearch(data);
+			}
+		});
+		$("#sideMenu .history").on('click', function(e) {
+			e.stopPropagation();
+			$t = $(e.target);
+			if ($t.is('a')) {
+				console.log($t.text());
+				$("#input_kw").val($t.text());
+	            fnKwSearch();
+			}
+		});
+	// 搜索
+		$("#input_kw").on('keypress',function(e) {  
+	        var keycode = e.keyCode;  
+	        var searchName = $(this).val();  
+	        if(keycode=='13') {  
+	            e.preventDefault();
+	            // alert("搜索");
+	            //请求搜索接口
+	            fnKwSearch();
+	        }  
+	    });
+	    $("#sideMenu .btn_search").click(function(e) {
+	    	fnKwSearch();
+	    });
+	    $("#sideMenu .cancel").click(function(e) {
+	    	$("#input_kw").val('');
+	    	fnReturnSearch();
+	    });
 	});
-	$("#sideMenu").on('click', function() {
-		$(this).slideUp();
-		fnDeBlur();
-	});
+
 	// $("#sideMenu").on('scroll', function(e) {
 	// 	e.preventDefault();
 	// 	e.stopPropagation();

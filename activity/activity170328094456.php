@@ -131,7 +131,7 @@ if (isLogged()) {
     <?php    } ?>
     <?php function fnListCont($cid,$tim,$dat,$tex,$imgN,$img,$likN,$comN){
         global $dbh;?>
-                        <div class="cont-body">
+                        <div class="cont-body" id="cont<?php echo $cid?>">
                             <input value="<?php echo $cid ?>" type="hidden">
                             <div class="time-location">
                                 <div><i class="icon-clock2"></i></div>
@@ -243,9 +243,10 @@ if (isLogged()) {
         <input type="hidden" value="11">
         <div class="head">
             <i class="icon-navigate_before leave"></i>
-            <a href="../index.php" class="icon-tv logo"></a>
+            <a href="../index.php" class="icon-home logo"></a>
             <div class="right">
                 <i class="icon-redo refresh"></i>
+                <i class="icon-bubble2 comment"></i>
                 <!--关注-->
                 <?php if (canEdit($fromUId)) {?>
                 <i class="icon-edit moreEdit"></i>
