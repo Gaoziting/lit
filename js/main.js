@@ -404,7 +404,7 @@ if (fnIsLogged()) {fnLoadActi ();}
 	            	var list_focu = 
 		            	'<div class="list_acti" data-aid='+data[i]["aid"]+'>\
 							<div><div class="imgWrap"><img src="'+data[i]["img"]+'" alt=""></div></div>\
-							<a href="activity/'+data[i]["pag"]+'" class="tit_abs"><div>'+data[i]["tit"]+'</div><div>'+data[i]["des"]+'</div></a>\
+							<a href="'+data[i]["pag"]+'" class="tit_abs"><div>'+data[i]["tit"]+'</div><div>'+data[i]["des"]+'</div></a>\
 							<div class="tim"><div>'+data[i]["tim"]+'</div><i class="icon-bin cancel_focus"></i></div>\
 						</div>';
 					$("#toggle_focu").next(".wp_list").prepend(list_focu);

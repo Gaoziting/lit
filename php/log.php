@@ -16,7 +16,7 @@ if(!empty($row)){
 	}else{
 		$arr['status'] = 200;
 		$uid = $row['user_id'];
-		$time = time();
+		$time = date('Y-m-d H:i:s',time());
 		$_SESSION['uid'] = $uid;
 		$_SESSION['logname'] = $logname;
 		$_SESSION['uname'] = $row['uname'];

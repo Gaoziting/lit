@@ -62,7 +62,7 @@ $(function(){
 			acti = data['acti'];
             acti.forEach( function(element, i) {
             	var list_acti = 
-	            	'<a href="'+acti[i]['page_name']+'">\
+	            	'<a href="'+acti[i]['pag']+'">\
 						<div class="col-xs-2">\
 							<div class="imgWrap"><img src="'+acti[i]['cover']+'"></div>\
 						</div>\

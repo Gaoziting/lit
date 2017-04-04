@@ -19,12 +19,13 @@ if (!empty($row[0])) {
 	$dbh->exec($sql_sch);
 	$schid = $dbh->lastInsertId();
 	$arr['schid'] = $schid;
-
+	$head = 'default'.mt_rand(1,4).'.jpg';
 	$sql_sq = "INSERT INTO security_question (question) VALUES ('$s_q')";
 	$dbh->exec($sql_sq);
 	$sqid = $dbh->lastInsertId();
 	$arr['sqid'] = $sqid;
-	$sql = "INSERT INTO user (logname,uname,password,type,school_id,security_question_id,security_answer) VALUES ('$logname','$logname','$password','$utype','$schid','$sqid','$s_a')";
+	$lt =  date('Y-m-d H:i:s',time());
+	$sql = "INSERT INTO user (logname,uname,password,type,headimg,school_id,security_question_id,security_answer,lastlogin_time) VALUES ('$logname','$logname','$password','$utype','$head','$schid','$sqid','$s_a','$lt')";
 	$rst = $dbh->exec($sql);
 	// 判断影响行数，验证是否插入新用户
 	if ($rst>0) {

@@ -6,7 +6,7 @@ define('UPLOAD_PATH', dirname(dirname(__FILE__))."/upload/activity/");
 $uid = $_SESSION['uid'];
 $bro = $_SESSION['uname'];
 $tit = $_POST['tit'];
-$abs = $_POST['abs'];
+$abs = nl2br($_POST['abs']);
 $tid = $_POST['typ'];
 $org = $_POST['org'];
 $pla = $_POST['pla'];

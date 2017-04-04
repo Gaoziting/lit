@@ -461,7 +461,7 @@ if (isLogged()):
 	  	}
 		fnListLive($id,$cover,$state,$title,$abstract,$place,$start_time,'wrap11');
 	}else{
-	  echo '没有直播活动。';
+	  echo '没有活动。';
 	}
 
   $verN = 12;

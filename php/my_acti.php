@@ -3,7 +3,7 @@
 @include '../init.php';
 
 $uid = $_SESSION['uid'];
-$sql = "SELECT activity_id AS aid,title,abstract,cover,page_name,create_time FROM activity WHERE user_id = '$uid'";
+$sql = "SELECT activity_id AS aid,title,abstract,cover,create_time FROM activity WHERE user_id = '$uid'";
 $rst = $dbh->query($sql);
 $arr = $rst->fetchAll();
 foreach ($arr as $k => $v) {
@@ -16,7 +16,7 @@ foreach ($arr as $k => $v) {
 		$arr[$k]['ctime'] = date('Y年n月j日',$t);
 	}
 	$arr[$k]['csrc'] = 'upload/activity/'.$arr[$k]['cover'];
-	$arr[$k]['page'] = 'activity/'.$arr[$k]['page_name'];
+	$arr[$k]['page'] = 'activity/activity.php?aid='.$arr[$k]['aid'];
 }
 $str = json_encode($arr);
 echo $str;

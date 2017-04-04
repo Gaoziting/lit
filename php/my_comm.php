@@ -42,14 +42,14 @@ foreach ($arr as $k => $v) {
 			$arr[$k]['tar'] = 'cont';
 			break;
 		case 'activity':
-			$sql_sel = "SELECT activity_id AS aid,title,abstract,cover,page_name AS pag FROM activity WHERE activity_id = $tid";
+			$sql_sel = "SELECT activity_id AS aid,title,abstract,cover AS pag FROM activity WHERE activity_id = $tid";
 			$rst_sel = $dbh->query($sql_sel);
 			$row = $rst_sel->fetch();
 			$arr[$k]['aid'] = $row[0];
 			$arr[$k]['tit'] = $row[1];
 			$arr[$k]['des'] = $row[2];
 			$arr[$k]['img'] = 'upload/activity/'.$row[3];
-			$arr[$k]['pag'] = 'activity/'.$row[4];
+			$arr[$k]['pag'] = 'activity/activity.php?aid='.$row['aid'];
 			$arr[$k]['tar'] = 'acti';
 			break;
 		case 'comment':
