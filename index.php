@@ -625,6 +625,8 @@ if (isLogged()):
 <!-- 发布直播 -->
 <?php
   if(isPublisher()){
+  	$rst = $dbh->query("SELECT * FROM acti_type");
+  	$row = $rst->fetchAll();
   ?>
 	<div id="publish_trigger"><span class="icon-images"></span><br>图文发布</div>
   <section class="fill_activity" id="fillActivity">
@@ -640,7 +642,17 @@ if (isLogged()):
 		  <input type="text" name="tit" placeholder="直播标题">
 		</div>
 		<div class="subject-intro">
-		  <input type="text" name="typ" placeholder="活动种类">
+			<select name="typ" >
+				<option value="">活动种类</option>
+			    <span class="icon-location3"></span>
+			    <input type="text" name="pla" placeholder="活动地点">
+			<?php
+				foreach ($row as $k => $v) {?>
+					<option value="<?php echo $row[$k]['type_id']?>"><?php echo $row[$k]['type']?></option>
+				<?php
+				}
+			?>
+			</select>
 		</div>
 		<!-- 封面与概述 -->
 		<div id="cover">
@@ -658,8 +670,6 @@ if (isLogged()):
 		</div>
 		<div class="subject-intro i2">
 		  <input type="text" name="org" placeholder="主办方">
-		  <span class="icon-location3"></span>
-		  <input type="text" name="pla" placeholder="活动地点">
 		</div>
 		<div class="subject-intro iset">
 		<!-- <input placeholder="Date" class="textbox-n" type="text" onfocus="(this.type='date')"  id="date"> -->

@@ -928,7 +928,7 @@ ul, ol{margin: 0;}
     color: #000;
   }
   .subject-intro select{
-    width: 90vw;
+    /*width: 90vw;*/
     background-color: transparent;
     font-size: .14rem;
     padding-left: .20rem;
