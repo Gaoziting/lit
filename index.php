@@ -845,7 +845,7 @@ $dbh = NULL;
 <!-- 加载中 -->
 <div id="loading">
   <div class="imgWrap">
-    <img src="../upload/activity/cover_20170307171305.jpg" alt="加载中">
+    <img src="image/loading.gif" alt="加载中">
   </div>
 </div>
 <script src="js/jquery-3.1.1.min.js"></script>

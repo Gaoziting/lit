@@ -440,7 +440,7 @@
                         <!-- 加载中 -->
                         <div id="loading">
                           <div class="imgWrap">
-                            <img src="images/loading.jpg" alt="加载中">
+                            <img src="../image/loading.gif" alt="加载中">
                           </div>
                         </div>
 

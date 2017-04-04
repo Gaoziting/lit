@@ -412,7 +412,7 @@ $dbh = NULL;
 <!-- 加载中 -->
 <div id="loading">
   <div class="imgWrap">
-    <img src="../upload/content/content_17032020404472.GIF" alt="加载中">
+    <img src="../image/loading.gif" alt="加载中">
   </div>
 </div>
 <!-- 切换大图 -->
