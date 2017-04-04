@@ -10,15 +10,11 @@ if (!isset($_POST['aid'])) {
 	$aid = $_POST['aid'];
 	$tit = $_POST['tit'];
 	$abs = $_POST['abs'];
-	$typ = $_POST['typ'];
-	$dat = $_POST['dat'];
+	$tid = $_POST['tid'];
+	// echo $_POST['tid'];
+	// $dat = $_POST['dat'];
 	// filterEmoji($newCap);
 	// 判断是否改变，再update
-	$row = $dbh->query("SELECT type_id FROM acti_type WHERE type = '$typ'")->fetch();
-	if (empty($row[0])) {
-		$dbh->query("INSERT INTO acti_type (type) VALUES ('$typ')");
-		$tid = $dbh->lastInsertId();
-	}else $tid = $row[0];
 
 	// 可以修改活动封图、标题、概要、种类、活动地点
 	$sql = "UPDATE activity SET title = '$tit',abstract = '$abs',acti_type_id = '$tid' WHERE activity_id = '$aid'";

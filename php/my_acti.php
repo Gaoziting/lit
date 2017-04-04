@@ -3,7 +3,7 @@
 @include '../init.php';
 
 $uid = $_SESSION['uid'];
-$sql = "SELECT title,abstract,cover,page_name,create_time FROM activity WHERE user_id = '$uid'";
+$sql = "SELECT activity_id AS aid,title,abstract,cover,page_name,create_time FROM activity WHERE user_id = '$uid'";
 $rst = $dbh->query($sql);
 $arr = $rst->fetchAll();
 foreach ($arr as $k => $v) {

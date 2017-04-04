@@ -109,9 +109,9 @@ if (isLogged()):
 
 		<!--修改头像-->
 		<form id="changeHeadImg" action="php/user_edit_headImg.php" method="post" enctype="multipart/form-data">
-                <input type="file" name="img[]" value="" class="upload_input" id="changeHead">
+                <input type="file" name="img[]" accept="image/*" value="" class="upload_input" id="changeHead">
 			<!-- <input capture="camera" id="inputImg" name="img[]" accept="image/*" class="upload_input" type="file"> -->
-			<input capture="camera" id="reInputImg" name="img[]" accept="image/*" class="upload_input" type="file">
+			<input id="reInputImg" name="img[]" accept="image/*" class="upload_input" type="file">
 			<div id="showImg">
 				<i class="icon-cross close"></i>
 				<div class="row1"><div class="imgWrap"></div></div>
@@ -341,25 +341,23 @@ if (isLogged()):
 <section id="main">
   <?php
 	// 创建显示列表函数
-	function fnListLive($id,$page,$cover,$state,$title,$abstract,$place,$start_time,$wrapType){
-	  $page = 'activity/'.$page;
+	function fnListLive($id,$cover,$state,$title,$abstract,$place,$start_time,$wrapType){
 	  $cover = 'upload/activity/'.$cover;
 	  switch ($wrapType) {
 		case 'wrap11':
 		  ?>
-			<a href="<?php echo $page?>" class="wrap11">
+			<a href="activity/activity.php?aid=<?php echo $id?>" class="wrap11">
 			  <input type="hidden" value="<?php echo $id?>">
 			  <div class="imgWrap">
 				<!-- <img src="upload/5.jpg"> -->
-				<img src="<?php echo $cover?>">
-			  </div>
-			  <div class="title"><?php 
-			  if($state == 1){echo '<span class="onAir">正在进行</span>';
+				<img src="<?php echo $cover?>"><?php 
+			  if($state == 1){echo '<span class="onAir">正在直播</span>';
 			  }else if ($state == 0) {
-			  	echo '<span class="onAir">尚未开始</span>';
+			  	echo '<span class="onAir">即将直播</span>';
 			  }
 			  ?>
-			  <?php echo $title?></div>
+			  </div>
+			  <div class="title"><?php echo $title?></div>
 			  <div class="abstract">
 			  <?php echo $abstract?></div>
 			  <div class="timeSpace">
@@ -373,20 +371,19 @@ if (isLogged()):
 		  break;
 		case 'wrap21':
 		  ?>
-			<a href="<?php echo $page?>" class="wrap21">
+			<a href="activity/activity.php?aid=<?php echo $id?>" class="wrap21">
 			  <input type="hidden" value="<?php echo $id?>">
 			  <div class="imgWrap">
 				<img src="<?php echo $cover?>">
+					<?php 
+				  if($state == 1){echo '<span class="onAir">正在直播</span>';
+				  }else if ($state == 0) {
+				  	echo '<span class="onAir">即将直播</span>';
+				  }?>
 			  </div>
 			  <div class="wrapR">
 				<div class="wrap">
-				  <div class="title">
-					<?php 
-				  if($state == 1){echo '<span class="onAir">正在进行</span>';
-				  }else if ($state == 0) {
-				  	echo '<span class="onAir">尚未开始</span>';
-				  }?>
-				  <?php echo $title?></div>
+				  <div class="title"><?php echo $title?></div>
 				  <div class="timeSpace">
 					<span class="space"><?php echo $place?></span>
 					<span class="time"><i class="icon-clock"></i><?php echo $start_time?></span>
@@ -406,9 +403,9 @@ if (isLogged()):
 			  <div class="wrapR">
 				<div class="wrap">
 				<?php 
-			  if($state == 1){echo '<div class="onAir">正在进行</div>';
+			  if($state == 1){echo '<div class="onAir">正在直播</div>';
 			  }else if ($state == 0) {
-			  	echo '<div class="onAir">尚未开始</div>';
+			  	echo '<div class="onAir">即将直播</div>';
 			  }?>
 				  <div class="title"><?php echo $title?></div>
 				  <div class="timeSpace">
@@ -439,7 +436,6 @@ if (isLogged()):
 	  $id = $row['activity_id'];
 	  $title = $row['title'];
 	  $abstract = $row['abstract'];
-	  $page = $row['page_name'];
 	  // date('H:i',strtotime($row['creTime']))
 	  // echo date('Y',strtotime('now'));
 	  $place = $row['place'];
@@ -463,7 +459,7 @@ if (isLogged()):
 	  	}else{
 	  		$state = 2;
 	  	}
-		fnListLive($id,$page,$cover,$state,$title,$abstract,$place,$start_time,'wrap11');
+		fnListLive($id,$cover,$state,$title,$abstract,$place,$start_time,'wrap11');
 	}else{
 	  echo '没有直播活动。';
 	}
@@ -475,7 +471,6 @@ if (isLogged()):
 	  $id = $row['activity_id'];
 	  $title = $row['title'];
 	  $abstract = $row['abstract'];
-	  $page = $row['page_name'];
 	  $place = $row['place'];
 	  $cover = $row['cover'];
 	  $st = strtotime($row['start_time']);
@@ -499,16 +494,16 @@ if (isLogged()):
 	  	}
 	if ($no<=3) {
 		// 前3个用wrap21
-	  fnListLive($id,$page,$cover,$state,$title,$abstract,$place,$start_time,'wrap21');
+	  fnListLive($id,$cover,$state,$title,$abstract,$place,$start_time,'wrap21');
 	}
 	else{
 	  // 生成随机数选择显示样式
 	  if(mt_rand(1,4)<4){
 		  // 选择wrap21
-		fnListLive($id,$page,$cover,$state,$title,$abstract,$place,$start_time,'wrap21');
+		fnListLive($id,$cover,$state,$title,$abstract,$place,$start_time,'wrap21');
 	  }else{
 		  // 选择wrap11
-		  fnListLive($id,$page,$cover,$state,$title,$abstract,$place,$start_time,'wrap11');
+		  fnListLive($id,$cover,$state,$title,$abstract,$place,$start_time,'wrap11');
 		}
 	}
 	$row = $rst->fetch();
@@ -518,7 +513,6 @@ if (isLogged()):
 	  $id = $row['activity_id'];
 	  $title = $row['title'];
 	  $abstract = $row['abstract'];
-	  $page = $row['page_name'];
 	  $place = $row['place'];
 	  $cover = $row['cover'];
 	  $st = strtotime($row['start_time']);
@@ -569,7 +563,6 @@ if (isLogged()):
 	  $id = $row['activity_id'];
 	  $title = $row['title'];
 	  $abstract = $row['abstract'];
-	  $page = $row['page_name'];
 	  $place = $row['place'];
 	  $cover = $row['cover'];
 	  $st = strtotime($row['start_time']);
@@ -643,9 +636,7 @@ if (isLogged()):
 		</div>
 		<div class="subject-intro">
 			<select name="typ" >
-				<option value="">活动种类</option>
-			    <span class="icon-location3"></span>
-			    <input type="text" name="pla" placeholder="活动地点">
+				<option value="">种类</option>
 			<?php
 				foreach ($row as $k => $v) {?>
 					<option value="<?php echo $row[$k]['type_id']?>"><?php echo $row[$k]['type']?></option>
@@ -653,6 +644,8 @@ if (isLogged()):
 				}
 			?>
 			</select>
+		    <span class="icon-location"></span>
+		    <input type="text" name="pla" placeholder="活动地点">
 		</div>
 		<!-- 封面与概述 -->
 		<div id="cover">
@@ -662,7 +655,7 @@ if (isLogged()):
 			  <div class="img_preview_wrap">
 				<span class="icon-plus"></span>
 				<!-- <img src="images/4.jpg" alt=""> -->
-				<input type="file" capture="camera" name="cover" id="inputCover" accept="image/*" class="upload_input">
+				<input type="file" name="cover" id="inputCover" accept="image/*" class="upload_input">
 			  </div>
 			</div>
 			<textarea name="abs" cols="30" rows="10" placeholder="主题概述"></textarea>
@@ -675,12 +668,63 @@ if (isLogged()):
 		<!-- <input placeholder="Date" class="textbox-n" type="text" onfocus="(this.type='date')"  id="date"> -->
 		  <!-- 活动时间：17年 月 日 开始时间：  结束直播 -->
 		  活动日期：
-		  <input type="text" name="yea" size="4" value="2017" placeholder="----">年
-		  <input type="text" name="mon" size="2" placeholder="--">月
-		  <input type="text" name="day" size="2" placeholder="--">日
+		  <select name="yea">
+		  <?php 
+		  for ($i=2015; $i <= date("Y",time())+1; $i++) {
+		  if ($i==date("Y",time())){?>
+		  	<option value="<?php echo $i?>" selected="selected"><?php echo $i?></option>
+		  <?php }else{?>
+		  	<option value="<?php echo $i?>"><?php echo $i?></option>
+		  <?php }
+		  }
+		   ?>
+		  </select>年
+		  <select name="mon">
+		  <?php 
+		  for ($i=1; $i <= 12; $i++) {
+		  if ($i==date("n",time())){?>
+		  	<option value="<?php echo $i?>" selected="selected"><?php echo $i?></option>
+		  <?php }else{?>
+		  	<option value="<?php echo $i?>"><?php echo $i?></option>
+		  <?php }
+		  }
+		   ?>
+		  </select>月
+		  <select name="day">
+		  <?php 
+		  for ($i=1; $i <= 31; $i++) {
+		  if ($i==date("j",time())){?>
+		  	<option value="<?php echo $i?>" selected="selected"><?php echo $i?></option>
+		  <?php }else{?>
+		  	<option value="<?php echo $i?>"><?php echo $i?></option>
+		  <?php }
+		  }
+		   ?>
+		  </select>日
 		  <br>
 		  开始时间：
-		  <input type="text" name="hou" size="2" placeholder="--">:<input type="text" name="min" size="2" placeholder="--">
+		  <select name="hou">
+		  <?php 
+		  for ($i=0; $i <= 24; $i++) {
+		  if ($i==date("G",time())){?>
+		  	<option value="<?php echo $i?>" selected="selected"><?php echo $i?></option>
+		  <?php }else{?>
+		  	<option value="<?php echo $i?>"><?php echo $i?></option>
+		  <?php }
+		  }
+		   ?>
+		  </select>:
+		  <select name="min">
+		  <?php 
+		  for ($i=0; $i <= 59; $i++) {
+		  if ($i==date("i",time())){?>
+		  	<option value="<?php echo $i?>" selected="selected"><?php echo $i?></option>
+		  <?php }else{?>
+		  	<option value="<?php echo $i?>"><?php echo $i?></option>
+		  <?php }
+		  }
+		   ?>
+		  </select>
 		</div>
 		<input class="btn" type="submit" value="创建直播" onclick="fnResetAfterSubmit()">
 

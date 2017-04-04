@@ -303,7 +303,7 @@ if (fnIsLogged()) {fnLoadActi ();}
 	            data.forEach( function(element, i) {
 	            	// console.log(data[i]);
 	            	var list_acti = 
-		            	'<div class="list_acti">\
+		            	'<div class="list_acti" data-aid='+data[i]["aid"]+'>\
 							<div><div class="imgWrap"><img src="'+data[i]["csrc"]+'" alt=""></div></div>\
 							<a href="'+data[i]["page"]+'" class="tit_abs"><div>'+data[i]["title"]+'</div><div>'+data[i]["abstract"]+'</div></a>\
 							<div class="tim"><div>'+data[i]["ctime"]+'</div><i class="icon-bin del_acti"></i></div>\
@@ -402,10 +402,10 @@ if (fnIsLogged()) {fnLoadActi ();}
 	            fnLoading(0);
 	            data.forEach( function(element, i) {
 	            	var list_focu = 
-		            	'<div class="list_acti">\
+		            	'<div class="list_acti" data-aid='+data[i]["aid"]+'>\
 							<div><div class="imgWrap"><img src="'+data[i]["img"]+'" alt=""></div></div>\
 							<a href="activity/'+data[i]["pag"]+'" class="tit_abs"><div>'+data[i]["tit"]+'</div><div>'+data[i]["des"]+'</div></a>\
-							<div class="tim"><div>'+data[i]["tim"]+'</div><i class="icon-bin del_acti"></i></div>\
+							<div class="tim"><div>'+data[i]["tim"]+'</div><i class="icon-bin cancel_focus"></i></div>\
 						</div>';
 					$("#toggle_focu").next(".wp_list").prepend(list_focu);
 	            });

@@ -14,7 +14,13 @@ function canEdit(){
         return ($uid == $fromUId)?true:false;
     }
 }
-    $aid = 4;
+function isClosed(){
+    global $state;
+    if ($state==1) {
+        return true;
+    }
+}
+    $aid = isset($_GET['aid'])?$_GET['aid']:0;
     $sql = "SELECT * FROM activity WHERE activity_id='$aid'";
     $rst = $dbh->query($sql);
     if (is_bool($rst)) {
@@ -24,8 +30,8 @@ function canEdit(){
         $cov = "../upload/activity/".$row['cover'];
         $tit = $row['title'];
         $abs = $row['abstract'];
-        $typ_id = $row['acti_type_id'];
-        $sql_typ = "SELECT type FROM acti_type WHERE type_id='$typ_id'";
+        $tid = $row['acti_type_id'];
+        $sql_typ = "SELECT type FROM acti_type WHERE type_id='$tid'";
         $row_typ = $dbh->query($sql_typ)->fetch();
         $typ = $row_typ[0];
         $org = $row['organizer'];
@@ -130,7 +136,7 @@ if (isLogged()) {
                                     </div>
     <?php    } ?>
     <?php function fnListCont($cid,$tim,$dat,$tex,$imgN,$img,$likN,$comN){
-        global $dbh,$uid;?>
+        global $dbh;?>
                         <div class="cont-body">
                             <input value="<?php echo $cid ?>" type="hidden">
                             <div class="time-location">
@@ -146,7 +152,7 @@ if (isLogged()) {
                                       <?php } ?>
                                         <li><a>举报</a></li>
                                       </ul>
-                                      </div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="report_wrap">
@@ -160,45 +166,40 @@ if (isLogged()) {
                                 <?php
                                     switch ($imgN) {
                                         case 1:?>
-                                            <div class="wrap_contImg wrap1">
+                                            <div class="wrap_contImg wp1">
                                                 <span class="imgWrap"><img src="<?php echo $img[0]?>"></span>
                                             </div>
                                         <?php break;
                                         case 2:?>
-                                            <div class="wrap_contImg wrap2">
+                                            <div class="wrap_contImg wp2">
                                                 <span class="imgWrap"><img src="<?php echo $img[0]?>"></span>
                                                 <span class="imgWrap"><img src="<?php echo $img[1]?>"></span>
                                             </div>
                                         <?php break;
                                         case 3:?>
-                                            <div class="wrap_contImg wrap3">
+                                            <div class="wrap_contImg wp3">
                                                 <span class="imgWrap"><img src="<?php echo $img[0]?>"></span>
                                                 <span class="imgWrap"><img src="<?php echo $img[1]?>"></span>
                                                 <span class="imgWrap"><img src="<?php echo $img[2]?>"></span>
                                             </div>
                                         <?php break;
                                         case 4:?>
-                                            <div class="wrap_contImg wrap2 wrap4">
-                                                <span class="imgWrap"><img src="<?php echo $img[0]?>"></span>
-                                                <span class="imgWrap"><img src="<?php echo $img[1]?>"></span>
-                                                <span class="imgWrap"><img src="<?php echo $img[2]?>"></span>
-                                                <span class="imgWrap"><img src="<?php echo $img[3]?>"></span>
+                                            <div class="wrap_contImg wp2">
+                                                <div>
+                                                    <span class="imgWrap"><img src="<?php echo $img[0]?>"></span>
+                                                    <span class="imgWrap"><img src="<?php echo $img[1]?>"></span>
+                                                </div>
+                                                <div>
+                                                    <span class="imgWrap"><img src="<?php echo $img[2]?>"></span>
+                                                    <span class="imgWrap"><img src="<?php echo $img[3]?>"></span>
+                                                </div>
                                             </div>
                                         <?php break;
                                     }
                                  ?>
                                 <div class="interact-icons">
                                     <div>
-                                        <?php 
-                                            $sql = "SELECT count(*) FROM cont_like WHERE content_id='$cid' AND user_id='$uid'";
-                                            $rst = $dbh->query($sql);
-                                            $row = $rst->fetch();
-                                            $liked = '';
-                                            if (!empty($row[0])) {
-                                                $liked = 'on';
-                                            };
-                                         ?>
-                                        <a class="icon-heart4 like <?php echo $liked; ?>"></a><sup><?php echo $likN ?></sup></div>
+                                        <a class="icon-heart4 like"></a><sup><?php echo $likN ?></sup></div>
                                     <div>
                                         <a class="icon-bubbles comment"></a><sup><?php echo $comN ?></sup></div>
                                 </div>
@@ -232,10 +233,7 @@ if (isLogged()) {
                     $row_com = $rst_com->fetch();
                 }
                 if ($comN>0) {?>
-                <form action="comment.php" method="post" enctype="multipart/form-data">
-                    <input type="hidden" name="cid" value="<?php echo $cid ?>">
-                    <input type="submit" class="reply-detail moreCom" value="查看更多评论">
-                </form>
+                <a href="comment.php?type=content&id=<?php echo $cid?>" class="reply-detail moreCom">查看更多评论</a>
                 <?php }
             }
         ?>
@@ -245,23 +243,29 @@ if (isLogged()) {
     <?php    } ?>
 <!-- 获取cont-head信息，展示出来 -->
     <div class="separate_page" id="activity" style="display: block;">
-        <input type="hidden" value="4">
+        <input type="hidden" value="<?php echo $aid?>">
         <div class="head">
             <i class="icon-navigate_before leave"></i>
             <a href="../index.php" class="icon-home logo"></a>
             <div class="right">
                 <i class="icon-redo refresh"></i>
+                <a href="comment.php?type=activity&id=<?php echo $aid?>"><i class="icon-bubble2"></i></a>
                 <!--关注-->
                 <?php if (canEdit($fromUId)) {?>
                 <i class="icon-edit moreEdit"></i>
                 <div class="edit_list">
                     <ul>
                         <li><a class="icon-bin delete"></a></li>
-                        <li><a class="icon-calendar-times-o end"></a></li>
+                        <?php if (isClosed()){?>
+                            <li><a class="icon-calendar-plus-o start"></a></li>
+                        <?php }else{?>
+                            <li><a class="icon-calendar-times-o end"></a></li>
+                        <?php }?>
                         <!--编辑直播-->
-                        <li><a class="icon-pencil edit"></a></li>
-                        <li><a class="icon-add_a_photo add"></a>
-                        </li>
+                        <?php if (!isClosed()){?>
+                            <li><a class="icon-pencil edit"></a></li>
+                            <li><a class="icon-add_a_photo add"></a></li>
+                        <?php }?>
                     </ul>
                 </div>
                 <?php } ?>
@@ -291,7 +295,7 @@ if (isLogged()) {
                         <span class="date"><?php echo $dat?></span>
                         <span class="type"><?php echo $typ?></span>
                     </div>
-                    <div>主办方<span class="organizer">祁家园</span><span class="place"><i class="icon-location3"></i>异世界</span></div>
+                    <div>主办方<span class="organizer"><?php echo $org?></span><span class="place"><i class="icon-location"></i><?php echo $pla?></span></div>
                 </div>
                 <hr>
                 <p class="abs b_l"><?php echo $abs?></p>
@@ -301,7 +305,7 @@ if (isLogged()) {
     $rst = $dbh->query($sql);
     $row = $rst->fetch();
     if (empty($row[0])) {?>
-        <div class="no_cont add">该直播尚没有图文内容</div>
+        <div class="no_cont <?php echo !isClosed()&&canEdit()?"add":""?>">该直播尚没有图文内容</div>
     <?php }else{
         while (!empty($row[0])) {
             $cid = $row['content_id'];
@@ -339,8 +343,8 @@ if (isLogged()) {
         </div>
         <!-- 编辑图文 -->
         <form action="../php/cont_add.php" method="post" enctype="multipart/form-data" class="pop_edit" id="addCont">
-            <input name="aid" value="4" type="hidden">
-            <input capture="camera" name="img[]" id="inputContImg" accept="image/*" class="upload_input" type="file" multiple>
+            <input name="aid" value="<?php echo $aid?>" type="hidden">
+            <input name="img[]" id="inputContImg" accept="image/*" class="upload_input" type="file" multiple>
             <div class="wrap_addCont">
                 <i class="icon-cross close"></i>
                 <div class="wrap_img" id="addCont_imgsWrap">
@@ -353,25 +357,36 @@ if (isLogged()) {
                 </div>
             </div>
         </form>
-    </div>
         <!-- 编辑直播 -->
         <div class="pop_edit" id="editActivity">
             <div>
                 <i class="icon-cross close"></i>
-                <a class="col_l imgWrap cov">
-                </a>
+                <div class="col_l imgWrap cov">
+                </div>
                 <div class="col_r">
                     <div>
-                        <textarea name="tit" rows="2" placeholder="直播标题"></textarea>
+                        <input type="text" name="tit" placeholder="直播标题">
+                    </div>
+                    <div class="wrap_typ">活动种类 
+                        <select name="tid">
+                        <?php
+                            $rst = $dbh->query("SELECT * FROM acti_type");
+                            $row = $rst->fetchAll();
+                            foreach ($row as $k => $v) {?>
+                            <?php if ($row[$k]['type_id']==$tid){?>
+                                <option value="<?php echo $row[$k]['type_id']?>" selected="selected"><?php echo $row[$k]['type']?></option>
+                            <?php }else{?>
+                                <option value="<?php echo $row[$k]['type_id']?>"><?php echo $row[$k]['type']?></option>
+                            <?php }
+                            }
+                        ?>
+                        </select>
                     </div>
                     <!-- <div><input type="text" name="dat" placeholder="日期格式:YYYY-MM-DD"></div> -->
                 </div>
-                <div class="wrap_typ">
-                    <input type="text" name="typ" placeholder="活动类型">
-                </div>
-                <div class="wrap_dat">
+                <!-- <div class="wrap_dat">
                     <input type="text" name="dat" placeholder="活动日期">
-                </div>
+                </div> -->
                 <div class="wrap_abs">
                     <textarea name="abs" placeholder="主题概要"></textarea>
                 </div>
@@ -385,6 +400,7 @@ if (isLogged()) {
                 <input type="submit" id="submitCover">
             </form>
         </div>
+    </div>
 <?php
     }
 // 更新点击量

@@ -3,7 +3,7 @@
 @include '../init.php';
 
 $uid = $_SESSION['uid'];
-$sql = "SELECT activity.title AS tit,activity.abstract AS des,activity.cover AS img,activity.page_name AS pag,acti_focus.add_time AS tim FROM acti_focus JOIN activity ON acti_focus.activity_id=activity.activity_id WHERE acti_focus.user_id = '$uid'";
+$sql = "SELECT activity.activity_id AS aid,activity.title AS tit,activity.abstract AS des,activity.cover AS img,activity.page_name AS pag,acti_focus.add_time AS tim FROM acti_focus JOIN activity ON acti_focus.activity_id=activity.activity_id WHERE acti_focus.user_id = '$uid'";
 $rst = $dbh->query($sql);
 // var_dump($dbh->errorInfo());
 $arr = $rst->fetchAll();

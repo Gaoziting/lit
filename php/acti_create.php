@@ -7,7 +7,7 @@ $uid = $_SESSION['uid'];
 $bro = $_SESSION['uname'];
 $tit = $_POST['tit'];
 $abs = $_POST['abs'];
-$typ = $_POST['typ'];
+$tid = $_POST['typ'];
 $org = $_POST['org'];
 $pla = $_POST['pla'];
 $y = $_POST['yea'];
@@ -18,6 +18,7 @@ $min = $_POST['min'];
 $dat = "{$y}-{$m}-{$d}";
 $st = "{$h}-{$min}";
 $stime =  date('Y-m-d H:i:s',mktime($h,$min,0,$m,$d,$y));
+$etime =  date('Y-m-d H:i:s',mktime($h,$min,0,$m,$d+1,$y));
 // $sti = $dat.' '.$st.':00';
 // $stime=date("Y-m-d H:i:s",strtotime($sti)?strtotime($sti):strtotime("now"));
 $img_input = 'cover';
@@ -85,30 +86,11 @@ if (!empty($tmp)) {
 			}else{
 				imagedestroy($img);
 	// 设置存储路径
-	// $path = 'activity-'.mt_rand(10,99).'-'.$time;
-	$path = 'activity'.$time.".php";
-	echo "<script>alert($path+' '+$covername);</script>";
-	$row = $dbh->query("SELECT type_id FROM acti_type WHERE type = '$typ'")->fetch();
-	if (empty($row[0])) {
-		$dbh->query("INSERT INTO acti_type (type) VALUES ('$typ')");
-		$atid = $dbh->lastInsertId();
-	}else $atid = $row[0];
-				$sql = "INSERT INTO activity (user_id,title,abstract,acti_type_id,cover,page_name,organizer,place,start_time) VALUES ('$uid','$tit','$abs','$atid','$covername','$path','$org','$pla','$stime')";
+				$sql = "INSERT INTO activity (user_id,title,abstract,acti_type_id,cover,organizer,place,start_time,end_time) VALUES ('$uid','$tit','$abs','$tid','$covername','$org','$pla','$stime','$etime')";
 				$rst = $dbh->query($sql);
 				if ($rst->rowCount()>0) {
 					$aid = $dbh->lastInsertId();
-					$templatePath = "../activity/activity_template.php";
-	$fp = fopen($templatePath,"r");
-	$str = fread($fp, filesize($templatePath));
-	$str = str_replace("{aid}", $aid, $str);
-	$str = str_replace("{organizer}", $org, $str);
-	$str = str_replace("{place}", $pla, $str);
-	$str = str_replace("{date}", $dat, $str);
-	fclose($fp);
-	$handle = fopen("../activity/".$path, "w");
-	fwrite($handle, $str);
-	fclose($handle);
-	echo "<script>alert('活动直播创建成功！');window.location.href='../activity/".$path."';</script>";
+	echo "<script>alert('活动直播创建成功！');window.location.href='../activity/activity.php?aid=".$aid."';</script>";
 					$sql = "INSERT INTO acti_log (activity_id,user_id,detail) VALUES ('$aid','$uid','创建活动直播成功')";
 					$dbh->query($sql);
 				}else{

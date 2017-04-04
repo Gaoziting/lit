@@ -360,9 +360,16 @@ $(function(){
 	    } else if ($t.is('.del_acti')) {
 	        if (confirm('删除活动直播')) {
 	            gloPath = 'php/';
-	            var aid = $t.closest('.block').children('input').val();
+	            var aid = $t.closest('.list_acti').attr('data-aid');;
 	            var data = { 'aid': aid };
 	            fnDelActi(data, 'index', $t);
+	        }
+	    } else if ($t.is('.cancel_focus')) {
+	        if (confirm('取消关注')) {
+	            gloPath = 'php/';
+	            var aid = $t.closest('.list_acti').attr('data-aid');;
+	            var data = { 'aid': aid };
+	            fnCancelFocus(data,$t,'index');
 	        }
 	    }
 	});
@@ -410,23 +417,23 @@ $(function(){
 	    	// 确认修改
 	    	var data = {'type':'uname','uname':$this.find('input[name="uname"]').val()};
 	    	// console.log(data);
-	    	fnEditUserName(data,$uname);
+	    	fnEditUser(data,$uname);
 	    }else if ($t.is('.submitSchool')) {
 	    	// 确认修改
 	    	var data = {'type':'school','school':$this.find('input[name="school"]').val()};
 	    	// console.log(data);
-	    	fnEditUserName(data,$school);
+	    	fnEditUser(data,$school);
 	    }else if ($t.is('.submitIntro')) {
 	    	// 确认修改
 	    	var data = {'type':'intro','intro':$this.find('textarea[name="intro"]').val()};
 	    	// console.log(data);
-	    	fnEditUserName(data,$intro);
+	    	fnEditUser(data,$intro);
 	    }else if (t==this){
 	    	$this.children().hide();
 		    $this.fadeOut();
 	    }
 	});
-	function fnEditUserName(data,$info){
+	function fnEditUser(data,$info){
 	    $.ajax({
 	      url: 'php/user_edit.php',
 	      type: 'POST',
@@ -608,7 +615,7 @@ $(function(){
 	    $dat = $this.find('.date');
 	    // console.log($typ);
 	    if ($t.is('.leave')) {
-	        window.history.back();
+	    	location.replace(document.referrer);
 	        console.log(t.nodeValue + ' ' + t.nodeType);
 	    } else if ($t.is('.moreEdit')) {
 	    	fnShow($t.next(),'fadeIn');
@@ -628,7 +635,57 @@ $(function(){
 		    	// }
 	    	}
 	    } else if ($t.is('.end')) {
-	    	if(confirm('确定关闭活动直播？')){}
+	    	if(confirm('确定关闭活动直播？')){
+	    		var data = {'aid':$this.children('input').val()};
+			    $.ajax({
+			        url: '../php/acti_close_live.php',
+			        type: 'POST',
+			        dataType: 'json',
+			        data: data,
+			        beforeSend: function() {
+			            fnLoading(1);
+			        },
+			        success: function(data) {
+			            fnLoading(0);
+			            if (data.status == 200) {
+			            	alert("直播关闭成功");
+			            	location.reload();
+			            } else {
+			                $p.html(data.status);
+			            }
+			        },
+			      error: function (hd,msg) {
+			            fnLoading(0);
+			        alert(msg);
+			      },
+			    });
+	    	}
+	    } else if ($t.is('.start')) {
+	    	if(confirm('确定开启活动直播？')){
+	    		var data = {'aid':$this.children('input').val()};
+			    $.ajax({
+			        url: '../php/acti_start_live.php',
+			        type: 'POST',
+			        dataType: 'json',
+			        data: data,
+			        beforeSend: function() {
+			            fnLoading(1);
+			        },
+			        success: function(data) {
+			            fnLoading(0);
+			            if (data.status == 200) {
+			            	alert("直播已成功开启，将于1天后关闭，届时请手动重新开启");
+			            	location.reload();
+			            } else {
+			                $p.html(data.status);
+			            }
+			        },
+			      error: function (hd,msg) {
+			            fnLoading(0);
+			        alert(msg);
+			      },
+			    });
+	    	}
 	    } else if ($t.is('.edit')) {
 	    	var $edi = $("#editActivity");
 	    	var tit = $tit.html();
@@ -640,7 +697,7 @@ $(function(){
 		    // 获取背景url路径
 		    // if (fnIsPC()) {cov = cov.split('"')[1].split('"')[0];}
 		    // else cov = cov.split('(')[1].split(')')[0];
-		    $edi.find('textarea[name="tit"]').val(tit);
+		    $edi.find('input[name="tit"]').val(tit);
 		    var abs_text = abs.replace(/<br>/ig,"\r\n").replace(/&nbsp;/g," ");
 		    $edi.find('textarea[name="abs"]').val(abs_text);
 		    $edi.find('input[name="typ"]').val(typ);
@@ -836,16 +893,16 @@ $(function(){
 		    $this.fadeOut();
 		}else if ($t.is('.btn')) {
 		    var aid = $("#addCont>input[name='aid']").val();
-		    var tit = $this.find("textarea[name='tit']").val();
+		    var tit = $this.find("input[name='tit']").val();
 		    var abs = $this.find("textarea[name='abs']").val();
-		    var typ = $this.find("input[name='typ']").val();
+		    var tid = $this.find("select[name='tid']").val();
 		    var dat = $this.find("input[name='dat']").val();
 		    var abs_html = abs.replace(/(\r)*\n/g,"<br>").replace(/\s/g,"&nbsp;");
 		    var data = {
 		      'aid':aid,
 		      'tit':tit,
 		      'abs':abs_html,
-		      'typ':typ,
+		      'tid':tid,
 		      'dat':dat
 		    };
 		    $.ajax({
@@ -980,7 +1037,7 @@ $(function(){
 			    		alert('活动删除成功！');
 			    		window.history.back();
 	            	}else {
-			    		$t.closest('.block').slideUp(function () {
+			    		$t.closest('.list_acti').slideUp(function () {
 			              $(this).remove();
 			            });
 	            	}
@@ -1211,9 +1268,18 @@ $(function(){
 	      },
 	    });
 	}
-	function fnCancelFocus(data, $t){
-		$.ajax({
-	        url: '../php/acti_cancel_focus.php',
+	function fnCancelFocus(data, $t,page='activity'){
+		var path;
+		switch (page) {
+			case 'index':
+				path = 'php/';
+				break;
+			case 'activity':
+				path = '../php/';
+				break;
+		}
+	    $.ajax({
+	        url: path+'acti_cancel_focus.php',
 	        type: 'POST',
 	        dataType: 'json',
 	        data: data,
@@ -1223,10 +1289,19 @@ $(function(){
 	        success: function(data) {
 	            fnLoading(0);
 	            if (data.status == 200) {
-	                $focN.text(data.focN);
-		    		$t.removeClass('on');
-			    	$focN.removeClass('on');
-			    	$t.children('i').removeClass('icon-checkmark').addClass('icon-plus');
+	            	switch (page) {
+						case 'activity':
+			                $focN.text(data.focN);
+				    		$t.removeClass('on');
+					    	$focN.removeClass('on');
+					    	$t.children('i').removeClass('icon-checkmark').addClass('icon-plus');
+							break;
+						case 'index':
+				    		$t.closest('.list_acti').slideUp(function () {
+				              $(this).remove();
+				            });
+							break;
+	            	}
 	            } else {
 	                alert(data.status);
 	            }
@@ -1263,6 +1338,7 @@ $(function(){
 	    //   var obj = $(this);
 	    //   fnResizeImg(obj);
 	    //  })
+	    fnBlurUnderLayer($("#main"));
 	    $("#fillActivity").show().animate({left:"0vw"},800,'easeOutExpo');
 	    // 显示上传的封图
 	    $("#inputCover").off('change').on('change', function() {
@@ -1270,6 +1346,7 @@ $(function(){
 	    	fnPreviewImgFile(this.files,$("#coverWrap"));
 	    });
 	    $("#leaveEdit").click(function() {
+	    	fnDeBlur();
 	    	$("#fillActivity").fadeOut();
 	    });
 	});
